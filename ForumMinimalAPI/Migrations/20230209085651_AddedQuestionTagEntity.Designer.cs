@@ -4,6 +4,7 @@ using ForumMinimalAPI.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ForumMinimalAPI.Migrations
 {
     [DbContext(typeof(ForumContext))]
-    partial class ForumContextModelSnapshot : ModelSnapshot
+    [Migration("20230209085651_AddedQuestionTagEntity")]
+    partial class AddedQuestionTagEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -70,15 +73,10 @@ namespace ForumMinimalAPI.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("QuestionId")
-                        .HasColumnType("int");
-
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("QuestionId");
 
                     b.HasIndex("UserId");
 
@@ -196,19 +194,11 @@ namespace ForumMinimalAPI.Migrations
 
             modelBuilder.Entity("ForumMinimalAPI.Entities.Comment", b =>
                 {
-                    b.HasOne("ForumMinimalAPI.Entities.Question", "Question")
-                        .WithMany("Comments")
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
                     b.HasOne("ForumMinimalAPI.Entities.User", "User")
                         .WithMany("Comments")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Question");
 
                     b.Navigation("User");
                 });
@@ -265,11 +255,6 @@ namespace ForumMinimalAPI.Migrations
             modelBuilder.Entity("ForumMinimalAPI.Entities.Comment", b =>
                 {
                     b.Navigation("Ratings");
-                });
-
-            modelBuilder.Entity("ForumMinimalAPI.Entities.Question", b =>
-                {
-                    b.Navigation("Comments");
                 });
 
             modelBuilder.Entity("ForumMinimalAPI.Entities.User", b =>

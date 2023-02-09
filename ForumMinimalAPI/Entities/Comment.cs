@@ -11,6 +11,10 @@
         public Guid UserId { get; set; }
 
         //rel one Comment to many Ratings
-        public IQueryable<Rating> Ratings { get; set; }
+        public List<Rating> Ratings { get; set; } = new List<Rating>();
+
+        //rel one Question to many Comments
+        public Question Question { get; set; }
+        public int QuestionId { get; set; }
     }
 }

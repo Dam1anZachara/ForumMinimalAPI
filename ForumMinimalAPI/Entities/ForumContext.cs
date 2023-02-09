@@ -15,10 +15,11 @@ namespace ForumMinimalAPI.Entities
         public DbSet<Rating> Ratings { get; set; }
         public DbSet<Tag> Tags { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<QuestionTag> QuestionTag { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>(u => 
+            modelBuilder.Entity<User>(u =>
             {
                 // rel 1 to 1
                 u.HasOne(u => u.Address)
@@ -49,7 +50,23 @@ namespace ForumMinimalAPI.Entities
 
                 // rel M to M
                 q.HasMany(q => q.Tags)
-                .WithMany(t => t.Questions);
+                .WithMany(t => t.Questions)
+                .UsingEntity<QuestionTag>(qt =>
+                {
+                    qt.HasOne(t => t.Tag)
+                    .WithMany()
+                    .HasForeignKey(t => t.TagId);
+
+                    qt.HasOne(q => q.Question)
+                    .WithMany()
+                    .HasForeignKey(q => q.QuestionId);
+                });
+
+                // rel 1 to M
+                q.HasMany(q => q.Comments)
+                .WithOne(c => c.Question)
+                .HasForeignKey(q => q.QuestionId)
+                .OnDelete(DeleteBehavior.NoAction);
             });
 
             modelBuilder.Entity<Comment>(c =>

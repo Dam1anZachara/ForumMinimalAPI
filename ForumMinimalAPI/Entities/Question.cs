@@ -13,6 +13,10 @@ namespace ForumMinimalAPI.Entities
         public Guid UserId { get; set; }
 
         //rel many Questions to many Tags
-        public IQueryable<Tag> Tags { get; set; }
+        public List<Tag> Tags { get; set; } = new List<Tag>();
+
+        //rel one question to many Comments
+        public List<Comment> Comments { get; set; } = new List<Comment>();
+
     }
 }
